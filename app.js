@@ -13,6 +13,7 @@ var config = require('./config');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dishesRouter = require('./routes/dishesRoutes');
+var favouritesRouter = require('./routes/favouritesRouter');
 var leadersRouter = require('./routes/leaderRouter');
 var promotionsRouter = require('./routes/promoRouter');
 var uploadRouter = require('./routes/uploadRouter');
@@ -61,6 +62,7 @@ app.use('/users', usersRouter);
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/dishes', dishesRouter);
+app.use('/favourites', favouritesRouter);
 app.use('/leaders', leadersRouter);
 app.use('/promotions', promotionsRouter);
 app.use('/imageUpload', uploadRouter);
