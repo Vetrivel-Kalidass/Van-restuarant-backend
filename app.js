@@ -20,13 +20,26 @@ var uploadRouter = require('./routes/uploadRouter');
 
 const Dishes = require('./models/dishes');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 var app = express();
 const url = config.mongoUrl;
-const connect = mongoose.connect(url);
+const connect = mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true); 
+
 
 connect.then((db) => {
   console.log("connected correctly to server");
 }, (err) => { console.log(err); });
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve, 
+  swaggerUi.setup(swaggerDocument)
+);
 
 // Secure traffic only 
 app.all('*', (req, res, next) => {

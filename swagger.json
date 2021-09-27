@@ -1,0 +1,1360 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Van-Restuarant",
+        "description": "Find a healthy and tasty foods",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:3443",
+    "basePath": "/",
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authorization and Other admin requests"
+        },
+        {
+            "name": "Dishes",
+            "description": "API for dishes in the system"
+        },
+        {
+            "name": "Comments",
+            "description": "API for dish comments in the system"
+        },
+        {
+            "name": "Favourites",
+            "description": "API for Favourite Dishes in the system"
+        },
+        {
+            "name": "Leaders",
+            "description": "API for Leaders in the system"
+        },
+        {
+            "name": "Promotions",
+            "description": "API for Promotions in the system"
+        },
+        {
+            "name": "ImageUpload",
+            "description": "API for ImageUpload in the system"
+        }
+    ],
+    "servers": [
+        {
+            "url": "https://localhost:3443/",
+            "description": "Local server"
+        }
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/users": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get All registered user from system(only for admin=true user)",
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Users"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Login User in system",
+                "parameters": [
+                    {
+                        "name": "credentials",
+                        "in": "body",
+                        "description": "credentials to login into system",
+                        "schema": {
+                            "$ref": "#/definitions/Credentials"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/SignInResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Create new User in system",
+                "parameters": [
+                    {
+                        "name": "newUser",
+                        "in": "body",
+                        "description": "User that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/Credentials"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New User is created",
+                        "schema": {
+                            "$ref": "#/definitions/SignUpResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/dishes": {
+            "get": {
+                "tags": [
+                    "Dishes"
+                ],
+                "summary": "Get all Dishes in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Dishes"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Dishes"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Create new Dish in system",
+                "parameters": [
+                    {
+                        "name": "dish",
+                        "in": "body",
+                        "description": "Dish that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/DishBody"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Dish is created",
+                        "schema": {
+                            "$ref": "#/definitions/Dish"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete All Dishes",
+                "tags": [
+                    "Dishes"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Dishes deleted successfully"
+                    }
+                }
+            }
+        },
+        "/dishes/{dishId}": {
+            "parameters": [
+                {
+                    "name": "dishId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of dish that we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Dishes"
+                ],
+                "summary": "Get Dish by ID in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Dish"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Dishe with given ID",
+                "tags": [
+                    "Dishes"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "dish",
+                        "in": "body",
+                        "description": "Dish with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/DishBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dish is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Dish"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the Dish by ID",
+                "tags": [
+                    "Dishes"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dish deleted successfully"
+                    }
+                }
+            }
+        },
+        "/dishes/{dishId}/comments": {
+            "get": {
+                "parameters": [
+                    {
+                        "name": "dishId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of dish that we want to find comments for",
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Get all comments from Dish by ID in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Comments"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Create new comment Dish in system",
+                "parameters": [
+                    {
+                        "name": "dishId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of dish that we want to find comments for",
+                        "type": "string"
+                    },
+                    {
+                        "name": "comment",
+                        "in": "body",
+                        "description": "Comment that we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/CommentBody"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Comment is created",
+                        "schema": {
+                            "$ref": "#/definitions/Dish"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete All comments from Dish",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "dishId",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of dish that we want to find comments for",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Comments deleted from dish successfully"
+                    }
+                }
+            }
+        },
+        "/dishes/{dishId}/comments/{commentId}": {
+            "parameters": [
+                {
+                    "name": "dishId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of dish that we want to find",
+                    "type": "string"
+                },
+                {
+                    "name": "commentId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of Comment that we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Comments"
+                ],
+                "summary": "Get Comment by ID in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Comment with given ID",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "comment",
+                        "in": "body",
+                        "description": "Comment with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/CommentBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Comment"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the Comment by ID",
+                "tags": [
+                    "Comments"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment deleted successfully"
+                    }
+                }
+            }
+        },
+        "/favourites": {
+            "get": {
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "summary": "Get all Favourite Dishes by current user token in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Favourites"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Add a favourite list of dishes in system",
+                "parameters": [
+                    {
+                        "name": "favourite",
+                        "in": "body",
+                        "description": "List of favourite dishes",
+                        "schema": {
+                            "$ref": "#/definitions/FavouritesBodyArr"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Favourite Dishes created",
+                        "schema": {
+                            "$ref": "#/definitions/Favourites"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete All favourite Dishes",
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Favourite Dishes deleted successfully"
+                    }
+                }
+            }
+        },
+        "/favourites/{dishId}": {
+            "parameters": [
+                {
+                    "name": "dishId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of dish that we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "summary": "Get Favourite Dish by ID in system(Have to remove thgis since dish GET return same as this",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Dish"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Add a favourite dishes in system",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Favourite Dish added",
+                        "schema": {
+                            "$ref": "#/definitions/Favourites"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the Dish from favourite",
+                "tags": [
+                    "Favourites"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dish removed from favourite successfully"
+                    }
+                }
+            }
+        },
+        "/leaders": {
+            "get": {
+                "tags": [
+                    "Leaders"
+                ],
+                "summary": "Get all Leaders in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Leaders"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Leaders"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Create new Dish in system",
+                "parameters": [
+                    {
+                        "name": "leader",
+                        "in": "body",
+                        "description": "Leader we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/LeaderBody"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Leader is created",
+                        "schema": {
+                            "$ref": "#/definitions/Leader"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete All Leaders",
+                "tags": [
+                    "Leaders"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Leaders deleted successfully"
+                    }
+                }
+            }
+        },
+        "/leaders/{leaderId}": {
+            "parameters": [
+                {
+                    "name": "leaderId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of Leader we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Leaders"
+                ],
+                "summary": "Get Leader by ID in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Leader"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Leader with given ID",
+                "tags": [
+                    "Leaders"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "leader",
+                        "in": "body",
+                        "description": "Leader with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/LeaderBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Leader is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Leader"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the Leader by ID",
+                "tags": [
+                    "Leaders"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Leader deleted successfully"
+                    }
+                }
+            }
+        },
+        "/promotions": {
+            "get": {
+                "tags": [
+                    "Promotions"
+                ],
+                "summary": "Get all Promotions in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Promotions"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Promotions"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Create new Promotion in system",
+                "parameters": [
+                    {
+                        "name": "promotion",
+                        "in": "body",
+                        "description": "Promotion we want to create",
+                        "schema": {
+                            "$ref": "#/definitions/PromotionBody"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New Promotion is created",
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete All Promotion",
+                "tags": [
+                    "Promotions"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All Promotions deleted successfully"
+                    }
+                }
+            }
+        },
+        "/promotions/{promoId}": {
+            "parameters": [
+                {
+                    "name": "promoId",
+                    "in": "path",
+                    "required": true,
+                    "description": "ID of Promotion we want to find",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Promotions"
+                ],
+                "summary": "Get Promotions by ID in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update Promotion with given ID",
+                "tags": [
+                    "Promotions"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "promotion",
+                        "in": "body",
+                        "description": "Promotion with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/PromotionBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Promotion is updated",
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete the Promotion by ID",
+                "tags": [
+                    "Promotions"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Promotion deleted successfully"
+                    }
+                }
+            }
+        },
+        "/imageUpload": {
+            "post": {
+                "tags": [
+                    "ImageUpload"
+                ],
+                "security": [
+                    {
+                        "Bearer": {
+                            "type": "apiKey",
+                            "name": "Authorization",
+                            "in": "header"
+                        }
+                    }
+                ],
+                "description": "Create new ImageUpload in system",
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "body",
+                        "description": "Image that we want to upload",
+                        "schema": {
+                            "type": "file"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Image uploaded successfully"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Credentials": {
+            "required": [
+                "username",
+                "password"
+            ],
+            "properties": {
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "required": [
+                "username",
+                "admin"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "firstname": {
+                    "type": "string"
+                },
+                "lastname": {
+                    "type": "string"
+                },
+                "admin": {
+                    "type": "boolean"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "Users": {
+            "type": "array",
+            "$ref": "#/definitions/User"
+        },
+        "SignInResponse": {
+            "properties": {
+                "success": {
+                    "types": "boolean"
+                },
+                "token": {
+                    "types": "string"
+                },
+                "status": {
+                    "types": "string"
+                }
+            }
+        },
+        "SignUpResponse": {
+            "properties": {
+                "success": {
+                    "types": "boolean"
+                },
+                "status": {
+                    "types": "string"
+                }
+            }
+        },
+        "DishBody": {
+            "required": [
+                "name",
+                "description",
+                "image",
+                "category",
+                "price",
+                "featured"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "featured": {
+                    "type": "boolean"
+                },
+                "comments": {
+                    "type": "array"
+                }
+            }
+        },
+        "Dish": {
+            "required": [
+                "name",
+                "description",
+                "image",
+                "category",
+                "price",
+                "featured"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "featured": {
+                    "type": "boolean"
+                },
+                "comments": {
+                    "type": "array",
+                    "$ref": "#/definitions/Comment"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "Dishes": {
+            "type": "array",
+            "$ref": "#/definitions/Dish"
+        },
+        "CommentBody": {
+            "required":[
+                "rating",
+                "comment",
+                "date"
+            ],
+            "properties": {
+                "rating":  {
+                    "type": "number"
+                },
+                "comment":  {
+                    "type": "string"
+                },
+                "date":  {
+                    "type": "string"
+                }
+            }
+        },
+        "Comment": {
+            "required":[
+                "rating",
+                "comment",
+                "date"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "rating":  {
+                    "type": "number"
+                },
+                "comment":  {
+                    "type": "string"
+                },
+                "author":  {
+                    "type": "object",
+                    "$ref": "#/definitions/User"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "Comments": {
+            "type": "array",
+            "$ref": "#/definitions/Comment"
+        },
+        "FavouritesBody": {
+            "required": [
+                "_id"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "FavouritesBodyArr": {
+            "type": "array",
+            "$ref": "#/definitions/FavouritesBody"
+        },
+        "Favourites": {
+            "required": [
+                "user",
+                "dishes"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/User"
+                },
+                "dishes": {
+                    "type": "array",
+                    "$ref": "#/definitions/Dish"
+                },
+                "createdAt":  {
+                    "type": "string"
+                },
+                "updatedAt":  {
+                    "type": "string"
+                }
+            }
+        },
+        "LeaderBody": {
+            "required": [
+                "name",
+                "image",
+                "designation",
+                "abbr",
+                "description"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "designation": {
+                    "type": "string"
+                },
+                "abbr": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "featured": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Leader": {
+            "required": [
+                "name",
+                "image",
+                "designation",
+                "abbr",
+                "description"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "designation": {
+                    "type": "string"
+                },
+                "abbr": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "featured": {
+                    "type": "boolean"
+                },
+                "createdAt":  {
+                    "type": "string"
+                },
+                "updatedAt":  {
+                    "type": "string"
+                }
+            }
+        },
+        "Leaders": {
+            "type": "array",
+            "$ref": "#/definitions/Leader"
+        },
+        "PromotionBody": {
+            "required": [
+                "name",
+                "image",
+                "price",
+                "description"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "featured": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "Promotion": {
+            "required": [
+                "name",
+                "image",
+                "price",
+                "description"
+            ],
+            "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "featured": {
+                    "type": "boolean"
+                },
+                "createdAt":  {
+                    "type": "string"
+                },
+                "updatedAt":  {
+                    "type": "string"
+                }
+            }
+        },
+        "Promotions": {
+            "type": "array",
+            "$ref": "#/definitions/Promotion"
+        }
+    }
+}
